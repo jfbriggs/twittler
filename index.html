@@ -3,11 +3,94 @@
   <head>
     <script src="jquery.js"></script>
     <script src="data_generator.js"></script>
+    <link href="https://fonts.googleapis.com/css?family=Bungee+Inline" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,700" rel="stylesheet">
+    <link href="main.css" rel="stylesheet">
+    <title>Twittler - Home</title>
   </head>
   <body>
+    <header>
+      <div class="title-bar">TWITTLE<span class="clicker">R</span></div>
+    </header>
+    <section>
+      <div class="new-tweets">Show new tweets</div>
+    </section>
+    <section class="tweets">
+      <div class="user-window">
+        <div class="user-window-top">Username</div>
+        <div class="user-window-middle">
+          <ul>
+            <li>@johnlicious: I love cookies!</li>
+            <li>@jb106: this election is the shit #theshit</li>
+            <li>@foofookitty: kittens rule #catlove</li>
+            <li>@jacobthegreat: I went to walmart today: worst. decision. ever.</li>
+            <li>@jb106: safw222 i make poopies all day long and i am writing this to be really long so that it goes over one line so i can see warfwa wfa wf rafwass</li>
+            <li>@ballzy: what's new in the hood? #thehood</li>
+          </ul>
+        </div>
+        <div class="user-window-bottom"><span id="close">Close</span></div>
+      </div>
+      <ul id="tweet-list">
+      </ul>
+    </section>
+    
+    <footer>
+      <div class="footer">App Design by James Briggs</div>
+    </footer>
+
     <script>
 
       $(document).ready(function(){
+
+        $('.clicker').on('click', function() {
+          $('.user-window').css({'display': 'block'});
+          $('.user-window').css({'opacity': '1'})
+          $('.title-bar').css({"opacity": "0.3"});
+          $('#tweet-list').css({"opacity": "0.3"});
+          $('.footer').css({"opacity": "0.3"});
+          $(".new-tweets").css({"opacity": "0.3"});
+        })
+
+        $('#close').on('click', function() {
+          $('.user-window').css({'display': 'none', 'opacity': '0'});
+          $('.title-bar').css({"opacity": "1"});
+          $('#tweet-list').css({"opacity": "1"});
+          $('.footer').css({"opacity": "1"});
+          $('.new-tweets').css({"opacity": "1"});
+        });
+
+        var update = function() {
+          var $tweets = $('#tweet-list');
+          $tweets.html('');
+
+          var index = streams.home.length - 1;
+          while(index >= 0){
+            var tweet = streams.home[index];
+            var $tweet = $('<li></li>');
+            $tweet.text('@' + tweet.user + ': ' + tweet.message);
+            $tweet.appendTo($tweets);
+            index -= 1;
+          }
+        }
+
+        $('.new-tweets').on('click', update);
+
+
+
+        var $tweets = $('#tweet-list');
+        $tweets.html('');
+
+        var index = streams.home.length - 1;
+        while(index >= 0){
+          var tweet = streams.home[index];
+          var $tweet = $('<li></li>');
+          $tweet.text('@' + tweet.user + ': ' + tweet.message);
+          $tweet.appendTo($tweets);
+          index -= 1;
+        }
+
+
+        /*
         var $body = $('body');
         $body.html('');
 
@@ -19,7 +102,7 @@
           $tweet.appendTo($body);
           index -= 1;
         }
-
+        */
       });
 
     </script>
