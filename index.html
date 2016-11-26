@@ -12,24 +12,25 @@
     <header>
       <div class="title-bar">TWITTLE<span class="clicker">R</span></div>
     </header>
-    <section>
+    <section class="container">
       <div class="new-tweets">Show new tweets</div>
-    </section>
-    <section class="tweets">
-      <div class="user-window">
+      <div class="user-window tweets">
         <div class="user-window-top">Username</div>
         <div class="user-window-middle">
-          <ul>
-            <li>@johnlicious: I love cookies!</li>
-            <li>@jb106: this election is the shit #theshit</li>
-            <li>@foofookitty: kittens rule #catlove</li>
-            <li>@jacobthegreat: I went to walmart today: worst. decision. ever.</li>
-            <li>@jb106: safw222 i make poopies all day long and i am writing this to be really long so that it goes over one line so i can see warfwa wfa wf rafwass</li>
-            <li>@ballzy: what's new in the hood? #thehood</li>
+          <ul id="user-tweets">
+            <li><div class="message">@johnlicious: I love cookies!&nbsp</div><div class="time-stamp">Fri Nov 25 2016<br>12:40:33</div></li>
+            <li><div class="message">@jb106: this election is the shit #theshit&nbsp</div><div class="time-stamp">Fri Nov 25 2016<br>12:40:33</div></li>
+            <li><div class="message">@foofookitty: kittens rule #catlove&nbsp</div><div class="time-stamp">Fri Nov 25 2016<br>12:40:33</div></li>
+            <li><div class="message">@jacobthegreat: I went to walmart today: worst. decision. ever.&nbsp</div><div class="time-stamp">Fri Nov 25 2016<br>12:40:33</div></li>
+            <li><div class="message">@jb106: safw222 i make poopies all day long and i am writing this to be really long so that it goes over one line so i can see warfwa wfa wf rafwass&nbsp</div><div class="time-stamp">Fri Nov 25 2016<br>12:40:33</div></li>
+            <li><div class="message">@ballzy: what's new in the hood? #thehood&nbsp</div><div class="time-stamp">Fri Nov 25 2016<br>12:40:33</div></li>
           </ul>
         </div>
         <div class="user-window-bottom"><span id="close">Close</span></div>
       </div>
+    </section>
+    <section class="tweets">
+      
       <ul id="tweet-list">
       </ul>
     </section>
@@ -42,6 +43,12 @@
 
       $(document).ready(function(){
 
+        // Function to return properly formatted timestamp
+        var timeStamp = function(time) {
+          return time.toDateString() + "\n" + time.getHours() + ":" + time.getMinutes() + ":" + time.getSeconds();
+        }
+
+        // When clicked, shows user tweets window, dims rest of page behind
         $('.clicker').on('click', function() {
           $('.user-window').css({'display': 'block'});
           $('.user-window').css({'opacity': '1'})
@@ -51,6 +58,7 @@
           $(".new-tweets").css({"opacity": "0.3"});
         })
 
+        // Hides user tweets window, returns rest of page to normal opacity
         $('#close').on('click', function() {
           $('.user-window').css({'display': 'none', 'opacity': '0'});
           $('.title-bar').css({"opacity": "1"});
@@ -58,7 +66,8 @@
           $('.footer').css({"opacity": "1"});
           $('.new-tweets').css({"opacity": "1"});
         });
-
+        
+        // This function adds new tweets to the main feed
         var update = function() {
           var $tweets = $('#tweet-list');
           $tweets.html('');
@@ -66,17 +75,26 @@
           var index = streams.home.length - 1;
           while(index >= 0){
             var tweet = streams.home[index];
+            
+            // Updating so tweets view shows small timestamp on right side
             var $tweet = $('<li></li>');
-            $tweet.text('@' + tweet.user + ': ' + tweet.message);
+            var message = "@" + tweet.user + ": " + tweet.message;
+            var time = timeStamp(tweet.created_at);
+            $tweet.html('<div class="message">' + message + '</div><div class="time-stamp">' + time + '</div>')
+
+            // var $tweet = $('<li></li>');
+            // $tweet.text('@' + tweet.user + ': ' + tweet.message + " (" + timeStamp(tweet.created_at) + ")");
+
             $tweet.appendTo($tweets);
             index -= 1;
           }
         }
-
+        
+        // Show new tweets button, when clicked, updates feed
         $('.new-tweets').on('click', update);
 
 
-
+        // This starts the new page load with a set of tweets
         var $tweets = $('#tweet-list');
         $tweets.html('');
 
@@ -84,10 +102,17 @@
         while(index >= 0){
           var tweet = streams.home[index];
           var $tweet = $('<li></li>');
-          $tweet.text('@' + tweet.user + ': ' + tweet.message);
+
+          var message = "@" + tweet.user + ": " + tweet.message;
+          var time = timeStamp(tweet.created_at);
+          $tweet.html('<div class="message">' + message + '</div><div class="time-stamp">' + time + '</div>')
+          
+          // $tweet.text('@' + tweet.user + ': ' + tweet.message + " (" + timeStamp(tweet.created_at) + ")");
           $tweet.appendTo($tweets);
           index -= 1;
         }
+
+
 
 
         /*
