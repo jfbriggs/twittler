@@ -1,5 +1,15 @@
+body {
+  font-family: "Open Sans", sans-serif;
+}
+
 .box-opened {
   opacity: 0.5;
+}
+
+.container {
+  width: 900px;
+  margin: auto;
+  position: relative;
 }
 
 /*
@@ -33,10 +43,10 @@ MAIN TWEETS SECTION
 
 .tweets {
   width: 900px;
-  height: auto;
+  height: 670px;
   margin: 0 auto;
-  font-family: "Open Sans", sans-serif;
   position: relative;
+  overflow-y: auto;
 }
 
 .tweets a {
@@ -60,7 +70,7 @@ MAIN TWEETS SECTION
   margin: 0;
   display: flex;
   align-items: center;
-  padding: 0 30px 0 30px;
+  padding: 0 20px 0 30px;
 }
 
 .tweets li:last-child {
@@ -73,6 +83,26 @@ MAIN TWEETS SECTION
 
 .tweets li:nth-child(odd) {
   background-color: rgba(232, 143, 17, 0.5);
+}
+
+.message {
+  display: inline-block;
+  width: 80%;
+}
+
+/*
+===========================
+TIMESTAMP STYLING
+===========================
+*/
+
+.time-stamp {
+  font-size: 9px;
+  font-color: #4a4847;
+  display: inline-block;
+  padding-top: 1px;
+  width: 20%;
+  text-align: right;
 }
 
 /*
@@ -88,10 +118,11 @@ NEW TWEETS BUTTON
   border-bottom: 1px solid white;
   background-color: #4a4847;
   text-align: center;
-  font: bold 12px "Open Sans", sans-serif;
   text-transform: uppercase;
   color: white;
   padding-top: 8px;
+  font-size: 12px;
+  font-weight: bold;
 }
 
 .new-tweets:hover {
@@ -166,6 +197,14 @@ USER WINDOW
 
 #close:hover {
   cursor: pointer;
+}
+
+.user-window .message {
+  font-size: 13px;
+}
+
+.user-window li {
+  padding-left: 20px;
 }
 
 /*
