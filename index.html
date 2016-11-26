@@ -10,7 +10,7 @@
   </head>
   <body>
     <header>
-      <div class="title-bar">TWITTLER</span></div>
+      <div class="title-bar">TWITTLER</div>
     </header>
     <section class="container">
       <div class="new-tweets">Show new tweets</div>
@@ -37,25 +37,13 @@
 
       $(document).ready(function(){
 
+
         // Function to return properly formatted timestamp
         var timeStamp = function(time) {
           return time.toDateString() + "\n" + time.getHours() + ":" + time.getMinutes() + ":" + time.getSeconds();
         }
 
-
-        // Hides user tweets window, returns rest of page to normal opacity, clears user-tweets
-        $('#close').on('click', function() {
-          $('.user-window').css({'display': 'none'});
-          $('.title-bar').css({"opacity": "1"});
-          $('#tweet-list').css({"opacity": "1"});
-          $('.footer').css({"opacity": "1"});
-          $('.new-tweets').css({"opacity": "1"});
-          $('#user-tweets').html('');
-          $('#username').html('');
-        });
-
-        
-        // This function adds new tweets to the main feed
+        // This function repopulates main feed with current total tweets
         var update = function() {
           var $tweets = $('#tweet-list');
           $tweets.html('')
@@ -75,32 +63,17 @@
           }
         }
 
+        // Automatically populates first set of tweets on page load
+        update();
+
         
         // Show new tweets button, when clicked, updates feed
         $('.new-tweets').on('click', update);
 
 
-        // This starts the new page load with a set of tweets
-        var $tweets = $('#tweet-list');
-        $tweets.html('');
-
-        var index = streams.home.length - 1;
-        while(index >= 0){
-          var tweet = streams.home[index];
-          var $tweet = $('<li></li>');
-          var user = "@" + tweet.user;
-          var userID = tweet.user;
-          var message = ": " + tweet.message;
-          var time = timeStamp(tweet.created_at);
-          $tweet.html('<div class="message"><span class="user ' + userID + '">' + user + '</span>' + message + '</div><div class="time-stamp">' + time + '</div>');
-
-          $tweet.appendTo($tweets);
-          index -= 1;
-        }
-
         // CODE TO SHOW USER TWEETS IN WINDOW
 
-        function showUserTweets(name) {
+        var showUserTweets = function(name) {
           var $userTweets = $('#user-tweets');
           $userTweets.html('');
 
@@ -121,9 +94,21 @@
           $('#username').text('user tweets: @' + name);
         }
 
+
+        // Hides user tweets window, returns rest of page to normal opacity, clears user-tweets
+
+        $('#close').on('click', function() {
+          $('.user-window').css({'display': 'none'});
+          $('.title-bar').css({"opacity": "1"});
+          $('#tweet-list').css({"opacity": "1"});
+          $('.footer').css({"opacity": "1"});
+          $('.new-tweets').css({"opacity": "1"});
+          $('#user-tweets').html('');
+          $('#username').html('');
+        });
+
         // CODE TO OPEN WINDOW GIVEN SPECIFIC USER CLICK
-
-
+        
         $('.user').on('click', function() {
           $('.user-window').css({'display': 'block'});
           $('.title-bar').css({"opacity": "0.3"});
@@ -136,7 +121,7 @@
               showUserTweets(user);
             }
           }
-        });
+        }); 
 
       });
 
