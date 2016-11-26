@@ -10,20 +10,14 @@
   </head>
   <body>
     <header>
-      <div class="title-bar">TWITTLE<span class="clicker">R</span></div>
+      <div class="title-bar">TWITTLER</span></div>
     </header>
     <section class="container">
       <div class="new-tweets">Show new tweets</div>
       <div class="user-window tweets">
-        <div class="user-window-top">Username</div>
+        <div class="user-window-top" id="username">Username</div>
         <div class="user-window-middle">
           <ul id="user-tweets">
-            <li><div class="message">@johnlicious: I love cookies!&nbsp</div><div class="time-stamp">Fri Nov 25 2016<br>12:40:33</div></li>
-            <li><div class="message">@jb106: this election is the shit #theshit&nbsp</div><div class="time-stamp">Fri Nov 25 2016<br>12:40:33</div></li>
-            <li><div class="message">@foofookitty: kittens rule #catlove&nbsp</div><div class="time-stamp">Fri Nov 25 2016<br>12:40:33</div></li>
-            <li><div class="message">@jacobthegreat: I went to walmart today: worst. decision. ever.&nbsp</div><div class="time-stamp">Fri Nov 25 2016<br>12:40:33</div></li>
-            <li><div class="message">@jb106: safw222 i make poopies all day long and i am writing this to be really long so that it goes over one line so i can see warfwa wfa wf rafwass&nbsp</div><div class="time-stamp">Fri Nov 25 2016<br>12:40:33</div></li>
-            <li><div class="message">@ballzy: what's new in the hood? #thehood&nbsp</div><div class="time-stamp">Fri Nov 25 2016<br>12:40:33</div></li>
           </ul>
         </div>
         <div class="user-window-bottom"><span id="close">Close</span></div>
@@ -48,47 +42,39 @@
           return time.toDateString() + "\n" + time.getHours() + ":" + time.getMinutes() + ":" + time.getSeconds();
         }
 
-        // When clicked, shows user tweets window, dims rest of page behind
-        $('.clicker').on('click', function() {
-          $('.user-window').css({'display': 'block'});
-          $('.user-window').css({'opacity': '1'})
-          $('.title-bar').css({"opacity": "0.3"});
-          $('#tweet-list').css({"opacity": "0.3"});
-          $('.footer').css({"opacity": "0.3"});
-          $(".new-tweets").css({"opacity": "0.3"});
-        })
 
-        // Hides user tweets window, returns rest of page to normal opacity
+        // Hides user tweets window, returns rest of page to normal opacity, clears user-tweets
         $('#close').on('click', function() {
-          $('.user-window').css({'display': 'none', 'opacity': '0'});
+          $('.user-window').css({'display': 'none'});
           $('.title-bar').css({"opacity": "1"});
           $('#tweet-list').css({"opacity": "1"});
           $('.footer').css({"opacity": "1"});
           $('.new-tweets').css({"opacity": "1"});
+          $('#user-tweets').html('');
+          $('#username').html('');
         });
+
         
         // This function adds new tweets to the main feed
         var update = function() {
           var $tweets = $('#tweet-list');
-          $tweets.html('');
+          $tweets.html('')
 
           var index = streams.home.length - 1;
           while(index >= 0){
             var tweet = streams.home[index];
-            
-            // Updating so tweets view shows small timestamp on right side
             var $tweet = $('<li></li>');
-            var message = "@" + tweet.user + ": " + tweet.message;
+            var user = "@" + tweet.user;
+            var userID = tweet.user;
+            var message = ": " + tweet.message;
             var time = timeStamp(tweet.created_at);
-            $tweet.html('<div class="message">' + message + '</div><div class="time-stamp">' + time + '</div>')
-
-            // var $tweet = $('<li></li>');
-            // $tweet.text('@' + tweet.user + ': ' + tweet.message + " (" + timeStamp(tweet.created_at) + ")");
+            $tweet.html('<div class="message"><span class="user ' + userID + '">' + user + '</span>' + message + '</div><div class="time-stamp">' + time + '</div>');
 
             $tweet.appendTo($tweets);
             index -= 1;
           }
         }
+
         
         // Show new tweets button, when clicked, updates feed
         $('.new-tweets').on('click', update);
@@ -102,32 +88,56 @@
         while(index >= 0){
           var tweet = streams.home[index];
           var $tweet = $('<li></li>');
-
-          var message = "@" + tweet.user + ": " + tweet.message;
+          var user = "@" + tweet.user;
+          var userID = tweet.user;
+          var message = ": " + tweet.message;
           var time = timeStamp(tweet.created_at);
-          $tweet.html('<div class="message">' + message + '</div><div class="time-stamp">' + time + '</div>')
-          
-          // $tweet.text('@' + tweet.user + ': ' + tweet.message + " (" + timeStamp(tweet.created_at) + ")");
+          $tweet.html('<div class="message"><span class="user ' + userID + '">' + user + '</span>' + message + '</div><div class="time-stamp">' + time + '</div>');
+
           $tweet.appendTo($tweets);
           index -= 1;
         }
 
+        // CODE TO SHOW USER TWEETS IN WINDOW
 
+        function showUserTweets(name) {
+          var $userTweets = $('#user-tweets');
+          $userTweets.html('');
 
+          var i = streams.home.length - 1;
+          while (i >= 0) {
+            var tweet = streams.home[i];
+            var $tweet = $('<li></li>');
+            var message = "@" + tweet.user + ": " + tweet.message;
+            var time = timeStamp(tweet.created_at);
+            $tweet.html('<div class="message">' + message + '</div><div class="time-stamp">' + time + '</div')
 
-        /*
-        var $body = $('body');
-        $body.html('');
+            if (tweet.user === name) {
+              $tweet.appendTo($userTweets);
+            }
+            i -= 1;
+          }
 
-        var index = streams.home.length - 1;
-        while(index >= 0){
-          var tweet = streams.home[index];
-          var $tweet = $('<div></div>');
-          $tweet.text('@' + tweet.user + ': ' + tweet.message);
-          $tweet.appendTo($body);
-          index -= 1;
+          $('#username').text('user tweets: @' + name);
         }
-        */
+
+        // CODE TO OPEN WINDOW GIVEN SPECIFIC USER CLICK
+
+
+        $('.user').on('click', function() {
+          $('.user-window').css({'display': 'block'});
+          $('.title-bar').css({"opacity": "0.3"});
+          $('#tweet-list').css({"opacity": "0.3"});
+          $('.footer').css({"opacity": "0.3"});
+          $(".new-tweets").css({"opacity": "0.3"});
+
+          for (user in streams.users) {
+            if ($(this).hasClass(user)) {
+              showUserTweets(user);
+            }
+          }
+        });
+
       });
 
     </script>
