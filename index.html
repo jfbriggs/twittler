@@ -62,6 +62,22 @@
             $tweet.appendTo($tweets);
             index -= 1;
           }
+
+          // CODE TO OPEN USER-SPECIFIC TWEETS WINDOW ON CLICK OF USERNAME
+
+          $('.user').on('click', function() {
+            $('.user-window').css({'display': 'block'});
+            $('.title-bar').css({"opacity": "0.3"});
+            $('#tweet-list').css({"opacity": "0.3"});
+            $('.footer').css({"opacity": "0.3"});
+            $(".new-tweets").css({"opacity": "0.3"});
+
+            for (user in streams.users) {
+              if ($(this).hasClass(user)) {
+                showUserTweets(user);
+              }
+            }
+          });
         }
 
         // Automatically populates first set of tweets on page load
@@ -106,22 +122,6 @@
           $('.new-tweets').css({"opacity": "1"});
           $('#username').html('');
         });
-
-        // CODE TO OPEN WINDOW GIVEN SPECIFIC USER CLICK
-        
-        $('.user').on('click', function() {
-          $('.user-window').css({'display': 'block'});
-          $('.title-bar').css({"opacity": "0.3"});
-          $('#tweet-list').css({"opacity": "0.3"});
-          $('.footer').css({"opacity": "0.3"});
-          $(".new-tweets").css({"opacity": "0.3"});
-
-          for (user in streams.users) {
-            if ($(this).hasClass(user)) {
-              showUserTweets(user);
-            }
-          }
-        }); 
 
       });
 
